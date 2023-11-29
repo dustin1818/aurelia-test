@@ -1,0 +1,53 @@
+<template>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+
+    * {
+      font-family: 'Open Sans', sans-serif;
+    }
+
+    .done {
+      text-decoration: line-through;
+    }
+  </style>
+
+  <h1>${message}</h1>
+  <h1>${text}</h1>
+  <p>${word}</p>
+  <hr>
+  <h3>Event delegation</h3>
+  <button click.trigger="doSomething()">Click</button>
+
+  <button type="button" click.delegate="select('no')">Yes</button>
+  <hr>
+  <h2>Number: ${number} </h2>
+  <button click.trigger="incrementNumber()">Add</button>
+  <button click.trigger="decrementNumber()" disabled.bind="number <= 0 ? true : false">Subtract</button>
+  <button click.trigger="resetNumber()">Reset</button>
+  <hr>
+  <h2>Age Checker: ${age}</h2>
+  <input type="number" value.bind="age">
+  <button click.trigger="checkAge(age)">Check Age</button>
+  <hr>
+  <h2>${heading} List</h2>
+  <p>${heading2}</p>
+  <form action="" submit.trigger="addTodo()">
+    <input type="text" placeholder="add a todo..." value.bind="todoDescription">
+    <button disabled.bind="!todoDescription">add todo</button>
+  </form>
+  <ul>
+    <li repeat.for="todo of todos">
+      <input type="checkbox" checked.bind="todo.done">
+      <span class="${todo.done ? 'done' : ''}">${todo.description}</span>
+      <button click.trigger="remove(todo)">remove</button>
+      <button click.trigger="edit(todo)">edit</button>
+    </li>
+  </ul>
+  <hr>
+
+  <require from="toastr/build/toastr.min.css"></require>
+</template>
+
+if the edit button is pressed
+yung value ng todo mapupunta sa form
+tapos yung add button magiging edit button
