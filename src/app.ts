@@ -1,11 +1,18 @@
 import * as toastr from 'toastr';
 import { inject } from 'aurelia-framework';
 import { TodoService } from './services/todoService';
-
+import { HttpClient } from 'aurelia-fetch-client';
 
 interface ITodo {
   description: string;
   done: boolean
+}
+
+interface Quotes {
+  author: string,
+  content: string,
+  tags: [],
+
 }
 
 @inject(TodoService)
@@ -13,6 +20,7 @@ export class App {
   public message = 'Hello Dustin!';
   public text = "Hello Text"
   private word = "This is a private class"
+  QuoteService: any;
 
   // public constructor() {
   //   this.message = this.message + " " + this.text + " " + this.word;
@@ -57,7 +65,10 @@ export class App {
   todos: ITodo[];
   todoDescription: string
   todoService: TodoService
-  public constructor(todoService) {
+  quotes: Quotes[];
+  quote: string
+  author: string
+  public constructor(todoService, quoteService) {
     this.heading = "Todos";
     this.heading2 = "Save to Local Storage";
     this.todoDescription = '';
@@ -96,6 +107,18 @@ export class App {
   public saveTasks() {
     this.todoService.saveTasks(this.todos);
   }
+
+  public fetchQuote() {
+    let httpClient = new HttpClient();
+    httpClient.fetch('https://api.quotable.io/quotes/random')
+      .then(response => response.json())
+      .then(data => {
+        this.quote = data[0].content
+        this.author = data[0].author
+      });
+  }
+
+
 
 
 }

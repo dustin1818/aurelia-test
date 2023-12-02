@@ -11,8 +11,10 @@
     "@angular/animations": "^17.0.4",
     "aurelia-animator-css": "^1.0.4",
     "aurelia-bootstrapper": "^2.4.0",
+    "aurelia-fetch-client": "^1.8.2",
     "ngx-toastr": "^18.0.0",
-    "toastr": "^2.1.4"
+    "toastr": "^2.1.4",
+    "whatwg-fetch": "^3.6.19"
   },
   "devDependencies": {
     "@types/jest": "^29.5.2",
