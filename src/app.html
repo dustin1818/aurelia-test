@@ -88,4 +88,11 @@
     ${quote}
     <span>${author}</span>
   </blockquote>
+  <hr>
+  <h2>Guess the Number</h2>
+  <form action="" submit.trigger="submitGuess()">
+    <label for="number-choice">Input your guess number (1-10)</label>
+    <input type="numver" placeholder="press enter to submit" value.bind="inputNumber" maxlength="1">
+  </form>
+
   <require from="toastr/build/toastr.min.css"></require>

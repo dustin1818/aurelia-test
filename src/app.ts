@@ -68,7 +68,8 @@ export class App {
   quotes: Quotes[];
   quote: string
   author: string
-  public constructor(todoService, quoteService) {
+  inputNumber: number
+  public constructor(todoService) {
     this.heading = "Todos";
     this.heading2 = "Save to Local Storage";
     this.todoDescription = '';
@@ -116,6 +117,18 @@ export class App {
         this.quote = data[0].content
         this.author = data[0].author
       });
+  }
+
+
+
+  submitGuess() {
+    const randomNum = Math.floor((Math.random() * 10 + 1));
+    console.log(randomNum);
+    if (this.inputNumber == randomNum) {
+      toastr.success(`Your guess is: ${this.inputNumber}, it's  correct!`)
+    } else {
+      toastr.error(`Your guess is: ${this.inputNumber}, it's  incorrect should be ${randomNum}!`)
+    }
   }
 
 
