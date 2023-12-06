@@ -2,6 +2,7 @@ import * as toastr from 'toastr';
 import { inject } from 'aurelia-framework';
 import { TodoService } from './services/todoService';
 import { HttpClient } from 'aurelia-fetch-client';
+import { MovieService } from 'services/movieService';
 
 interface ITodo {
   description: string;
@@ -12,16 +13,18 @@ interface Quotes {
   author: string,
   content: string,
   tags: [],
-
 }
 
-@inject(TodoService)
+interface IGenre {
+  genre: string
+}
+
+@inject(TodoService, MovieService)
+
 export class App {
   public message = 'Hello Dustin!';
   public text = "Hello Text"
   private word = "This is a private class"
-  QuoteService: any;
-
   // public constructor() {
   //   this.message = this.message + " " + this.text + " " + this.word;
   // }
@@ -69,15 +72,28 @@ export class App {
   quote: string
   author: string
   inputNumber: number
-  public constructor(todoService) {
+  results: [];
+  movieService: MovieService;
+  index: number;
+  public constructor(todoService, movieService) {
     this.heading = "Todos";
     this.heading2 = "Save to Local Storage";
     this.todoDescription = '';
     this.todoService = todoService;
+    this.movieService = movieService;
+    this.results = []
+    this.index = 1
   }
 
   public attached() {
     this.todos = this.todoService.getTasks();
+  }
+
+  public activate() {
+    return this.movieService.getGenre().then((data) => {
+      this.results = data.results;
+    })
+      .catch((error) => console.error('Error fetching genres:', error));
   }
 
 
@@ -119,11 +135,8 @@ export class App {
       });
   }
 
-
-
-  submitGuess() {
+  public submitGuess() {
     const randomNum = Math.floor((Math.random() * 10 + 1));
-    console.log(randomNum);
     if (this.inputNumber == randomNum) {
       toastr.success(`Your guess is: ${this.inputNumber}, it's  correct!`)
     } else {
@@ -131,7 +144,16 @@ export class App {
     }
   }
 
-
-
-
+  public async btnGenre(index) {
+    console.log(index)
+    const url = this.movieService.fetchUrl.urlGenre + `${index.genre}/`;
+    const options = this.movieService.fetchUrl.options;
+    try {
+      const response = await fetch(url, options);
+      const result = await response.text();
+      console.log(result);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
