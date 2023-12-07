@@ -47,6 +47,17 @@
       font-weight: bold;
       margin-top: 1em;
     }
+
+    .show {
+      display: block;
+      object-fit: cover;
+      height: 450px;
+      width: 450px;
+    }
+
+    .hide {
+      display: none;
+    }
   </style>
 
   <h1>${message}</h1>
@@ -95,12 +106,24 @@
     <input type="number" placeholder="press enter to submit" value.bind="inputNumber" maxlength="1">
   </form>
   <h2>Discover top-rated movies based on your mood</h2>
-  <div class="btn-container" style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; ">
+  <div class="btn-container" style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
     <div repeat.for="movie of results">
       <button click.trigger="btnGenre(movie)">${movie.genre}</button>
     </div>
   </div>
+  <div class="" style="display: flex; flex-direction: column; gap: 10px; margin-top: 40px;">
+    <div class="">
+      <div class="" style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <img src="${movieInterface.image_url}" alt="${movieInterface.image_url}" style="object-fit: contain;">
+        <iframe class="${movieInterface ? 'show' : 'hide'}" src="${movieInterface.trailer}" frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
 
-
-
+      <p>${movieInterface.title}</p>
+      <p>${movieInterface.type}</p>
+      <p>${movieInterface.description}</p>
+    </div>
+  </div>
   <require from="toastr/build/toastr.min.css"></require>
+</template>

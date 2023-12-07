@@ -15,6 +15,14 @@ interface Quotes {
   tags: [],
 }
 
+interface Movie {
+  image_url: string,
+  title: string,
+  trailer: string,
+  type: string,
+  description: string
+}
+
 @inject(TodoService, MovieService)
 
 export class App {
@@ -67,6 +75,7 @@ export class App {
   results: [];
   movieService: MovieService;
   index: number;
+  movieInterface: Movie
   public constructor(todoService, movieService) {
     this.heading = "Todos";
     this.heading2 = "Save to Local Storage";
@@ -146,14 +155,15 @@ export class App {
       const result = await response.json();
       const totalMovieLength = result.results.length
       const randomMovie = result.results[Math.floor(Math.random() * totalMovieLength)]
-      if(randomMovie === undefined){
+      if (randomMovie === undefined) {
         toastr.info('No movie at this category 😥');
       }
       try {
         const urlMovie = this.movieService.fetchUrl.urlMovie + `${randomMovie.imdb_id}/`
         const response = await fetch(urlMovie, options);
         const result = await response.json();
-        console.log(result)
+        this.movieInterface = result.results;
+        console.log(this.movieInterface)
       } catch (error) {
         toastr.error(error);
       }
