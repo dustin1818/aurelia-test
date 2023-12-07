@@ -15,10 +15,6 @@ interface Quotes {
   tags: [],
 }
 
-interface IGenre {
-  genre: string
-}
-
 @inject(TodoService, MovieService)
 
 export class App {
@@ -41,7 +37,6 @@ export class App {
   }
 
   public number = 0;
-
   public incrementNumber() {
     this.number++;
   }
@@ -55,14 +50,11 @@ export class App {
   }
 
   public age;
-
-
   public checkAge(age) {
     age >= 18 ? toastr.success("You are old enough") : toastr.error("You are not old enough");
   }
 
-  // for form 
-
+  // for form
   heading: string;
   heading2: string;
   todos: ITodo[];
@@ -71,7 +63,7 @@ export class App {
   quotes: Quotes[];
   quote: string
   author: string
-  inputNumber: number
+  inputNumber: string
   results: [];
   movieService: MovieService;
   index: number;
@@ -93,7 +85,7 @@ export class App {
     return this.movieService.getGenre().then((data) => {
       this.results = data.results;
     })
-      .catch((error) => console.error('Error fetching genres:', error));
+      .catch((error) => toastr.error('Error fetching genres:', error));
   }
 
 
@@ -137,23 +129,36 @@ export class App {
 
   public submitGuess() {
     const randomNum = Math.floor((Math.random() * 10 + 1));
-    if (this.inputNumber == randomNum) {
+    if (this.inputNumber.toString() == randomNum.toString()) {
       toastr.success(`Your guess is: ${this.inputNumber}, it's  correct!`)
+      this.inputNumber = '';
     } else {
       toastr.error(`Your guess is: ${this.inputNumber}, it's  incorrect should be ${randomNum}!`)
+      this.inputNumber = '';
     }
   }
 
   public async btnGenre(index) {
-    console.log(index)
     const url = this.movieService.fetchUrl.urlGenre + `${index.genre}/`;
     const options = this.movieService.fetchUrl.options;
     try {
       const response = await fetch(url, options);
-      const result = await response.text();
-      console.log(result);
+      const result = await response.json();
+      const totalMovieLength = result.results.length
+      const randomMovie = result.results[Math.floor(Math.random() * totalMovieLength)]
+      if(randomMovie === undefined){
+        toastr.info('No movie at this category 😥');
+      }
+      try {
+        const urlMovie = this.movieService.fetchUrl.urlMovie + `${randomMovie.imdb_id}/`
+        const response = await fetch(urlMovie, options);
+        const result = await response.json();
+        console.log(result)
+      } catch (error) {
+        toastr.error(error);
+      }
     } catch (error) {
-      console.error(error);
+      toastr.error(error);
     }
   }
 }

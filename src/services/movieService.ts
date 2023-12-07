@@ -5,6 +5,7 @@ export class MovieService {
     public fetchUrl = {
         url: 'https://moviesminidatabase.p.rapidapi.com/genres/',
         urlGenre: 'https://moviesminidatabase.p.rapidapi.com/movie/byGen/',
+        urlMovie: 'https://moviesminidatabase.p.rapidapi.com/movie/id/',
         options: {
             method: 'GET',
             headers: {
