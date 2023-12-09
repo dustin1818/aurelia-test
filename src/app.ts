@@ -1,8 +1,10 @@
-import * as toastr from 'toastr';
+import toastr from 'toastr';
 import { inject } from 'aurelia-framework';
 import { TodoService } from './services/todoService';
 import { HttpClient } from 'aurelia-fetch-client';
 import { MovieService } from 'services/movieService';
+import { PasswordService } from 'services/passwordService';
+
 
 interface ITodo {
   description: string;
@@ -23,7 +25,7 @@ interface Movie {
   description: string
 }
 
-@inject(TodoService, MovieService)
+@inject(TodoService, MovieService, PasswordService)
 
 export class App {
   public message = 'Hello Dustin!';
@@ -59,7 +61,7 @@ export class App {
 
   public age;
   public checkAge(age) {
-    age >= 18 ? toastr.success("You are old enough") : toastr.error("You are not old enough");
+    age >= 18 ? toastr.success("You are old enough!") : toastr.error("You are not old enough");
   }
 
   // for form
@@ -76,7 +78,9 @@ export class App {
   movieService: MovieService;
   index: number;
   movieInterface: Movie
-  public constructor(todoService, movieService) {
+  movieAvailable: boolean
+  passwordService: PasswordService
+  public constructor(todoService, movieService, passwordService) {
     this.heading = "Todos";
     this.heading2 = "Save to Local Storage";
     this.todoDescription = '';
@@ -84,6 +88,7 @@ export class App {
     this.movieService = movieService;
     this.results = []
     this.index = 1
+    this.passwordService = passwordService;
   }
 
   public attached() {
@@ -150,25 +155,69 @@ export class App {
   public async btnGenre(index) {
     const url = this.movieService.fetchUrl.urlGenre + `${index.genre}/`;
     const options = this.movieService.fetchUrl.options;
-    try {
-      const response = await fetch(url, options);
-      const result = await response.json();
-      const totalMovieLength = result.results.length
-      const randomMovie = result.results[Math.floor(Math.random() * totalMovieLength)]
-      if (randomMovie === undefined) {
-        toastr.info('No movie at this category 😥');
-      }
-      try {
-        const urlMovie = this.movieService.fetchUrl.urlMovie + `${randomMovie.imdb_id}/`
-        const response = await fetch(urlMovie, options);
-        const result = await response.json();
-        this.movieInterface = result.results;
-        console.log(this.movieInterface)
-      } catch (error) {
-        toastr.error(error);
-      }
-    } catch (error) {
-      toastr.error(error);
+    //get genres and length
+    const genreResult = await this.movieService.fetchData(url, options);
+    const totalMovieLength = genreResult.results.length
+    this.movieAvailable = totalMovieLength !== undefined && totalMovieLength !== null;
+    const randomMovie = genreResult.results[Math.floor(Math.random() * totalMovieLength)]
+    if (randomMovie === undefined) {
+      toastr.info('No movie at this category 😥');
+    }
+    //get movie
+    const urlMovie = this.movieService.fetchUrl.urlMovie + `${randomMovie.imdb_id}/`
+    const movieResult = await this.movieService.fetchData(urlMovie, options);
+    this.movieInterface = movieResult.results;
+  }
+
+  // FUNCTION WAY TO CHECK THE TYPESCRIPT ELEMENT OF THE HTML
+  // isInputElement(element: HTMLElement): element is HTMLButtonElement {
+  //   return element.tagName === 'BUTTON';
+  // }
+
+  // checkPassword() {
+  //   const inputElement = document.getElementById('btn');
+  //   if (this.isInputElement(inputElement)) {
+  //     console.log(inputElement);
+  //   } else {
+  //     console.error('Element is not of type HTMLInputElement');
+  //   }
+  // }
+
+  public isOn = false;
+  public isOn2 = false;
+
+
+  seePass() {
+    const inputElement = document.getElementById("pass") as HTMLInputElement;
+    this.isOn = !this.isOn;
+    if (this.isOn) {
+      inputElement.type = "text"
+    } else {
+      inputElement.type = "password"
     }
   }
+  seePass2() {
+    const inputElement2 = document.getElementById("pass2") as HTMLInputElement;
+    this.isOn2 = !this.isOn2;
+    if (this.isOn2) {
+      inputElement2.type = "text"
+    } else {
+      inputElement2.type = "password"
+    }
+  }
+
+  passVariables = {
+    pass: '',
+    pass2: ''
+  }
+
+  checkPassword() {
+    console.log(this.passVariables.pass)
+    console.log(this.passVariables.pass2)
+    const inputElement = document.getElementById("pass") as HTMLInputElement;
+    const inputElement2 = document.getElementById("pass2") as HTMLInputElement;
+    this.passwordService.checkPassword(inputElement.value, inputElement2.value);
+  }
+
+
 }

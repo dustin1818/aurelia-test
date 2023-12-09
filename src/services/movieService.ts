@@ -1,5 +1,6 @@
 // movie-service.js
 import { HttpClient } from 'aurelia-fetch-client';
+import * as toastr from 'toastr';
 
 export class MovieService {
     public fetchUrl = {
@@ -19,5 +20,16 @@ export class MovieService {
         let httpClient = new HttpClient();
         return httpClient.fetch(this.fetchUrl.url, this.fetchUrl.options)
             .then((res) => res.json());
+    }
+
+    async fetchData(url, options) {
+        try {
+            const response = await fetch(url, options);
+            const result = await response.json();
+            return result;
+        } catch (error) {
+            toastr.error(error);
+            throw error; // Re-throw the error to propagate it up the call stack
+        }
     }
 }

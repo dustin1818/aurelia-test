@@ -1,6 +1,7 @@
 <template>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+    @import url("toastify-js/src/toastify.css");
 
     @import url(https://fonts.googleapis.com/css?family=Open+Sans:400italic);
 
@@ -60,6 +61,8 @@
     }
   </style>
 
+  <h1 style="text-align: center; text-decoration:overline;">Aurelia App Test</h1>
+
   <h1>${message}</h1>
   <h1>${text}</h1>
   <p>${word}</p>
@@ -105,13 +108,14 @@
     <label for="number-choice">Input your guess number (1-10)</label>
     <input type="number" placeholder="press enter to submit" value.bind="inputNumber" maxlength="1">
   </form>
+  <hr>
   <h2>Discover top-rated movies based on your mood</h2>
   <div class="btn-container" style="display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px;">
     <div repeat.for="movie of results">
       <button click.trigger="btnGenre(movie)">${movie.genre}</button>
     </div>
   </div>
-  <div class="" style="display: flex; flex-direction: column; gap: 10px; margin-top: 40px;">
+  <div class="" style="display: flex; flex-direction: column; gap: 10px; margin-top: 40px;" if.bind="movieAvailable">
     <div class="">
       <div class="" style="display: flex; gap: 20px; flex-wrap: wrap;">
         <img src="${movieInterface.image_url}" alt="${movieInterface.image_url}" style="object-fit: contain;">
@@ -119,11 +123,19 @@
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen></iframe>
       </div>
-
-      <p>${movieInterface.title}</p>
+      <h4 class="">${movieInterface.title}</h4>
       <p>${movieInterface.type}</p>
       <p>${movieInterface.description}</p>
     </div>
   </div>
+  <hr>
+  <h2>Password Checker</h2>
+  <input id="pass" type="password" placeholder="password" value.bind="passVariables.pass" required>
+  <button id="btn" click.trigger="seePass()">See Password</button>
+  <input id="pass2" type="password" placeholder="password" value.bind="passVariables.pass2">
+  <button id="btn" click.trigger="seePass2()" required>See Password</button>
+  <button style="display: block; margin-top: 10px;" click.trigger="checkPassword()"
+    disabled.bind="!passVariables.pass2 || !passVariables.pass">Check Password
+  </button>
   <require from="toastr/build/toastr.min.css"></require>
 </template>
