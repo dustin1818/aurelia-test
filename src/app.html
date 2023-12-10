@@ -131,12 +131,13 @@
   <hr>
   <h2>Password Checker</h2>
   <input id="pass" type="password" placeholder="password" value.bind="passVariables.pass" required>
-  <button id="btn" click.trigger="seePass()">See Password</button>
+  <button id="btn" click.trigger="seePass('pass')">See Password</button>
   <input id="pass2" type="password" placeholder="password" value.bind="passVariables.pass2">
-  <button id="btn" click.trigger="seePass2()" required>See Password</button>
+  <button id="btn2" click.trigger="seePass('pass2')" required>See Password</button>
   <button style="display: block; margin-top: 10px;" click.trigger="checkPassword()"
     disabled.bind="!passVariables.pass2 || !passVariables.pass">Check Password
   </button>
   <hr>
+
   <require from="toastr/build/toastr.min.css"></require>
 </template>

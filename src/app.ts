@@ -103,7 +103,7 @@ export class App {
       .catch((error) => toastr.error('Error fetching genres:', error));
   }
 
-
+  //todolist functions
   public addTodo() {
     if (this.todoDescription) {
       this.todos.push({
@@ -132,6 +132,7 @@ export class App {
     this.todoService.saveTasks(this.todos);
   }
 
+  //fetch quote
   public fetchQuote() {
     let httpClient = new HttpClient();
     httpClient.fetch('https://api.quotable.io/quotes/random')
@@ -142,6 +143,7 @@ export class App {
       });
   }
 
+  //guessing game
   public submitGuess() {
     const randomNum = Math.floor((Math.random() * 10 + 1));
     if (this.inputNumber.toString() == randomNum.toString()) {
@@ -153,6 +155,7 @@ export class App {
     }
   }
 
+  //movie
   public async btnGenre(index) {
     const url = this.movieService.fetchUrl.urlGenre + `${index.genre}/`;
     const options = this.movieService.fetchUrl.options;
@@ -184,12 +187,12 @@ export class App {
   //   }
   // }
 
-  public isOn = false; // Removed separate isOn2 variable
-
-  private seePass(id: string) {
+  public isOn: { [key: string]: boolean } = {};
+  seePass(id: string) {
     const inputElement = document.getElementById(id) as HTMLInputElement;
-    this.isOn = !this.isOn;
-    inputElement.type = this.isOn ? "text" : "password";
+    this.isOn[id] = !this.isOn[id];
+    inputElement.type = this.isOn[id] ? 'text' : 'password';
+    console.log(this.isOn[id])
   }
 
   public passVariables = {
@@ -200,5 +203,4 @@ export class App {
   public checkPassword() {
     this.passwordService.checkPassword(this.passVariables.pass, this.passVariables.pass2);
   }
-
 }
