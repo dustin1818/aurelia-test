@@ -3,6 +3,7 @@ import { HttpClient } from 'aurelia-fetch-client';
 import * as toastr from 'toastr';
 
 export class MovieService {
+    private apiKey = process.env.API_KEY;
     public fetchUrl = {
         url: 'https://moviesminidatabase.p.rapidapi.com/genres/',
         urlGenre: 'https://moviesminidatabase.p.rapidapi.com/movie/byGen/',
@@ -10,7 +11,7 @@ export class MovieService {
         options: {
             method: 'GET',
             headers: {
-                'X-RapidAPI-Key': '29e0f92a52msha3ad56560e93a9dp129f72jsnb74e9bcd2f56',
+                'X-RapidAPI-Key': this.apiKey,
                 'X-RapidAPI-Host': 'moviesminidatabase.p.rapidapi.com'
             }
         }

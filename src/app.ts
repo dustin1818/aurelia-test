@@ -5,7 +5,6 @@ import { HttpClient } from 'aurelia-fetch-client';
 import { MovieService } from 'services/movieService';
 import { PasswordService } from 'services/passwordService';
 
-
 interface ITodo {
   description: string;
   done: boolean
@@ -34,6 +33,8 @@ export class App {
   // public constructor() {
   //   this.message = this.message + " " + this.text + " " + this.word;
   // }
+
+
 
   doSomething() {
     alert("You clicked the button!");
@@ -183,41 +184,21 @@ export class App {
   //   }
   // }
 
-  public isOn = false;
-  public isOn2 = false;
+  public isOn = false; // Removed separate isOn2 variable
 
-
-  seePass() {
-    const inputElement = document.getElementById("pass") as HTMLInputElement;
+  private seePass(id: string) {
+    const inputElement = document.getElementById(id) as HTMLInputElement;
     this.isOn = !this.isOn;
-    if (this.isOn) {
-      inputElement.type = "text"
-    } else {
-      inputElement.type = "password"
-    }
-  }
-  seePass2() {
-    const inputElement2 = document.getElementById("pass2") as HTMLInputElement;
-    this.isOn2 = !this.isOn2;
-    if (this.isOn2) {
-      inputElement2.type = "text"
-    } else {
-      inputElement2.type = "password"
-    }
+    inputElement.type = this.isOn ? "text" : "password";
   }
 
-  passVariables = {
+  public passVariables = {
     pass: '',
     pass2: ''
-  }
+  };
 
-  checkPassword() {
-    console.log(this.passVariables.pass)
-    console.log(this.passVariables.pass2)
-    const inputElement = document.getElementById("pass") as HTMLInputElement;
-    const inputElement2 = document.getElementById("pass2") as HTMLInputElement;
-    this.passwordService.checkPassword(inputElement.value, inputElement2.value);
+  public checkPassword() {
+    this.passwordService.checkPassword(this.passVariables.pass, this.passVariables.pass2);
   }
-
 
 }

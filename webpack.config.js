@@ -24,6 +24,7 @@ const cssRules = [
     loader: "css-loader",
   },
 ];
+const Dotenv = require("dotenv-webpack");
 
 module.exports = ({ production }, { analyze, hmr, port, host }) => ({
   resolve: {
@@ -272,5 +273,6 @@ module.exports = ({ production }, { analyze, hmr, port, host }) => ({
      * `del` (https://www.npmjs.com/package/del), or `rimraf` (https://www.npmjs.com/package/rimraf).
      */
     new CleanWebpackPlugin(),
+    new Dotenv(),
   ],
 });
