@@ -17,17 +17,17 @@ export class MovieService {
         }
     }
 
-    getGenre() {
+    public getGenre() {
         let httpClient = new HttpClient();
         return httpClient.fetch(this.fetchUrl.url, this.fetchUrl.options)
             .then((res) => res.json());
     }
 
-    async fetchData(url, options) {
+    public fetchData(url, options) {
         try {
-            const response = await fetch(url, options);
-            const result = await response.json();
-            return result;
+            let httpClient = new HttpClient();
+            return httpClient.fetch(url, options)
+                .then((res) => res.json());
         } catch (error) {
             toastr.error(error);
             throw error; // Re-throw the error to propagate it up the call stack

@@ -4,6 +4,7 @@ import { TodoService } from './services/todoService';
 import { HttpClient } from 'aurelia-fetch-client';
 import { MovieService } from 'services/movieService';
 import { PasswordService } from 'services/passwordService';
+import { BlogService } from 'services/blogService';
 
 interface ITodo {
   description: string;
@@ -24,7 +25,7 @@ interface Movie {
   description: string
 }
 
-@inject(TodoService, MovieService, PasswordService)
+@inject(TodoService, MovieService, PasswordService, BlogService)
 
 export class App {
   public message = 'Hello Dustin!';
@@ -81,19 +82,19 @@ export class App {
   movieInterface: Movie
   movieAvailable: boolean
   passwordService: PasswordService
-  public constructor(todoService, movieService, passwordService) {
+  blogService: BlogService
+  constructor(todoService, movieService, passwordService, blogService) {
     this.heading = "Todos";
     this.heading2 = "Save to Local Storage";
     this.todoDescription = '';
     this.todoService = todoService;
     this.movieService = movieService;
+    this.todos = this.todoService.getTasks();
     this.results = []
     this.index = 1
     this.passwordService = passwordService;
-  }
-
-  public attached() {
-    this.todos = this.todoService.getTasks();
+    this.blogService = blogService;
+    this.blogService.fetchData();
   }
 
   public activate() {
@@ -101,6 +102,8 @@ export class App {
       this.results = data.results;
     })
       .catch((error) => toastr.error('Error fetching genres:', error));
+
+
   }
 
   //todolist functions

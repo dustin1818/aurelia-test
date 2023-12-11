@@ -266,13 +266,11 @@ module.exports = ({ production }, { analyze, hmr, port, host }) => ({
       ],
     }), // ignore dot (hidden) files
     ...when(analyze, new BundleAnalyzerPlugin()),
-    /**
-     * Note that the usage of following plugin cleans the webpack output directory before build.
-     * In case you want to generate any file in the output path as a part of pre-build step, this plugin will likely
-     * remove those before the webpack build. In that case consider disabling the plugin, and instead use something like
-     * `del` (https://www.npmjs.com/package/del), or `rimraf` (https://www.npmjs.com/package/rimraf).
-     */
     new CleanWebpackPlugin(),
-    new Dotenv(),
+    new Dotenv({
+      path: "./.env",
+      safe: true,
+      defaults: true,
+    }),
   ],
 });
